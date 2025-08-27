@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode.pedroPathing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -52,35 +52,24 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Basic: Linear OpMode", group="Linear OpMode")
 @Disabled
-public class BasicOpMode_Linear extends LinearOpMode {
+public class TeleOP extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
-    private DcMotor armMotor = null;
-
-
-    public static double armDown = 0;
-    public static double armMid = 0.5;
-    public static double armUp = 1;
-
 
     @Override
     public void runOpMode() {
-
-       double armHeight = 0;
-
-
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        armMotor = hardwareMap.get(DcMotor.class, "arm_motor");
+        leftDrive  = hardwareMap.get(DcMotor.class, "left_motor");
+        rightDrive = hardwareMap.get(DcMotor.class, "right_motor");
+
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -113,17 +102,10 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
 
-            if(gamepad1.a){
-                armHeight = armDown;
-            }
-
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
 
-            armMotor.setTargetPosition(armHeight);
-            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setPower(1);
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
