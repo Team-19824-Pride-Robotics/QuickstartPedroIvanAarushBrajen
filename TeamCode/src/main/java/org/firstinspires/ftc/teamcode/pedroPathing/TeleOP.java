@@ -59,16 +59,22 @@ public class TeleOP extends LinearOpMode {
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
 
+    private DcMotor armMotor = null;
+
+    public static int armUp = 2000;
+    public static int armMid = 1000;
+    public static int armScore = 1500;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
+        int armHeight = 0;
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_motor");
         rightDrive = hardwareMap.get(DcMotor.class, "right_motor");
+        armMotor = hardwareMap.get(DcMotor.class, "arm_motor");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -97,6 +103,19 @@ public class TeleOP extends LinearOpMode {
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
+
+
+
+
+            if(gamepad1.a){
+                armHeight = armUp;
+            }
+            if(gamepad1.b){
+                armHeight = armMid;
+            }
+            if(gamepad1.x){
+                armHeight = armScore;
+            }
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y ;
@@ -105,6 +124,11 @@ public class TeleOP extends LinearOpMode {
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
+
+
+            armMotor.setTargetPosition(armHeight);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            armMotor.setPower(1);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
